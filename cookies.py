@@ -17,12 +17,43 @@ import random
 import secrets
 import sys
 import tempfile
+import time
 
 
 GENERATIONS = 30 # change as desired, but decide at start
 FORMAT = "recipe-comparison" # lol
 VERSION = 1
 AUTOSAVE = Path("autosave")
+
+# 1 cup = 48 teaspoons, so a factor of 48 means the amount is shown in teaspoons.
+# Every other factor is grams per cup.
+TSP_PER_CUP = 48.0
+CUP_FACTORS = {
+    "flour": 122.0,
+    "butter": 230.0,
+    "sugar": 184.0,
+    "salt": 48.0,
+    "egg": 244.0,
+    "chocolate chips": 170.0,
+    "chocolate": 170.0,
+    "vanilla extract": 48.0,
+    "vanilla": 48.0,
+    "baking soda": 48.0,
+}
+
+
+def conversion_factor(item):
+    factor = item.get("factor")
+    if finite_number(factor) and factor > 0:
+        return factor
+    return CUP_FACTORS.get(item["name"].strip().casefold(), TSP_PER_CUP) # unknown -> teaspoons
+
+
+def format_amount(cups, factor):
+    value = cups * factor
+    if factor == TSP_PER_CUP:
+        return f"{value:.3f}tsp"
+    return f"{value:.1f}g"
 
 
 def require(condition, message): # mainly for the JSON validation, happens enough I'll save one line
@@ -202,6 +233,18 @@ def validate_state(state): # tried to cover everything, shouldn't really be need
         require(recipes[pending]["base_id"] == winner, "Pending recipe has the wrong base.")
 
 
+def replace_with_retry(source, destination, attempts=8, delay=0.05):
+    # Windows returns access denied if a watcher (PyCharm, antivirus) has either file open mid-rename
+    for attempt in range(attempts):
+        try:
+            os.replace(source, destination)
+            return
+        except PermissionError:
+            if attempt == attempts - 1:
+                raise
+            time.sleep(min(delay * 2 ** attempt, 1.0))
+
+
 def save_state(state, filename):
     # self-overwriting, just in case we forget to save. I don't want to have to redo a recipe
     path = Path(filename).expanduser()
@@ -216,10 +259,13 @@ def save_state(state, filename):
             handle.write(payload)
             handle.flush()
             os.fsync(handle.fileno())
-        os.replace(temporary, path)
+        replace_with_retry(temporary, path)
     finally:
         if temporary is not None:
-            temporary.unlink(missing_ok=True)
+            try:
+                temporary.unlink(missing_ok=True)
+            except OSError:
+                pass
 
 
 def load_state(filename):
@@ -295,9 +341,10 @@ def display_recipe(state, recipe_id, role):
         for item in state["ingredients"]:
             print(f"    {item['name']}: undefined (raw weight 0)")
     else:
-        print("  Ingredient proportions (total = 1 before display rounding):")
+        print("  Ingredient amounts (cups, then grams/teaspoons):")
         for item, proportion in zip(state["ingredients"], proportions):
-            print(f"    {item['name']}: {proportion:.10g}")
+            factor = conversion_factor(item)
+            print(f"    {item['name']}: {proportion:.5f} cups, {format_amount(proportion, factor)}")
 
 
 def display_comparison(state):
