@@ -1,0 +1,309 @@
+/* breadcrumb-10 - Colorlib
+ * Every style this snippet uses, and nothing else. No framework, no build step.
+ */
+
+/* Keeps a host page's framework base styles (Bootstrap's reboot) off this
+   snippet: every element starts from the browser default, then this sheet
+   styles it. On its own page it changes nothing. */
+:where(html) :is(html,body,div,span,p,a,h1,h2,h3,h4,h5,h6,label,input,select,option,optgroup,textarea,button,form,fieldset,legend,ul,ol,li,dl,dt,dd,figure,figcaption,section,article,header,footer,nav,main,aside,strong,b,em,i,small,sub,sup,blockquote,pre,code,picture,progress,output,summary,details,address,abbr,mark), :is(html, body) {
+  all: revert;
+}
+:where(html) input::-webkit-datetime-edit,
+:where(html) input::-webkit-datetime-edit-fields-wrapper,
+:where(html) input::-webkit-datetime-edit-text,
+:where(html) input::-webkit-datetime-edit-month-field,
+:where(html) input::-webkit-datetime-edit-day-field,
+:where(html) input::-webkit-datetime-edit-year-field {
+  all: revert;
+}
+/* Chrome maps the hidden attribute to display:none below author styles, so the
+   revert above would show every hidden element. Put it back at the weight of
+   one class: the snippet's own class rules can still override it, as they
+   could the browser default. */
+:where(html) [hidden]:where(:not([hidden="until-found" i])) {
+  display: none;
+}
+:where(html) :is(img, svg) {
+  vertical-align: revert;
+}
+:where(html) :is(img, table, thead, tbody, tfoot, tr, th, td, caption, hr, iframe, video) {
+  box-sizing: revert;
+}
+:where(html) img {
+  border-style: revert;
+}
+:where(html) table {
+  border-collapse: revert;
+  caption-side: revert;
+}
+:where(html) caption {
+  padding-top: revert;
+  padding-bottom: revert;
+  color: revert;
+  text-align: revert;
+}
+:where(html) th {
+  text-align: revert;
+}
+:where(html) :is(thead, tbody, tfoot, tr, td, th) {
+  border-color: revert;
+  border-style: revert;
+  border-width: revert;
+}
+:where(html) hr {
+  margin: revert;
+  color: revert;
+  background-color: revert;
+  border: revert;
+  opacity: revert;
+  height: revert;
+  overflow: revert;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../fonts/lora-400-italic-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../fonts/lora-400-italic-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../fonts/lora-400-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../fonts/lora-400-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../fonts/lora-600-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../fonts/lora-600-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+.cl-icon {
+  height: 1em;
+  width: auto;
+  fill: currentColor;
+  display: inline-block;
+}
+
+body {
+  margin: 0;
+  background: #fbf7f1;
+  font-family: "Lora", Georgia, "Times New Roman", serif;
+}
+
+.cl-breadcrumb10-demo {
+  padding: clamp(32px, 7vw, 88px) 16px;
+  color: #2b2118;
+}
+
+.cl-breadcrumb10-demo *,
+.cl-breadcrumb10-demo *::before,
+.cl-breadcrumb10-demo *::after {
+  box-sizing: border-box;
+}
+
+.cl-breadcrumb10-demo__page {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.cl-breadcrumb10 {
+  --cl-breadcrumb10-ink: #2b2118;
+  --cl-breadcrumb10-muted: #6b5847;
+  --cl-breadcrumb10-sep: #b49c84;
+  --cl-breadcrumb10-accent: #a16207;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.cl-breadcrumb10__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cl-breadcrumb10__item {
+  display: inline-flex;
+  align-items: baseline;
+  min-width: 0;
+}
+
+.cl-breadcrumb10__item + .cl-breadcrumb10__item::before {
+  content: "\2192";
+  content: "\2192" / "";
+  margin: 0 .7em;
+  color: var(--cl-breadcrumb10-sep);
+  font-size: .9em;
+}
+
+.cl-breadcrumb10__link {
+  padding-bottom: 2px;
+  color: var(--cl-breadcrumb10-muted);
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1.5px;
+  transition: background-size .3s ease, color .2s ease;
+}
+
+.cl-breadcrumb10__link:hover,
+.cl-breadcrumb10__link:focus-visible {
+  color: var(--cl-breadcrumb10-accent);
+  background-size: 100% 1.5px;
+}
+
+.cl-breadcrumb10__link:focus-visible {
+  outline: 2px solid var(--cl-breadcrumb10-accent);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+.cl-breadcrumb10__current {
+  color: var(--cl-breadcrumb10-ink);
+  font-style: italic;
+}
+
+.cl-breadcrumb10-demo__head {
+  margin-top: 28px;
+  padding: clamp(24px, 4vw, 40px);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 1px 0 #efe6da, 0 24px 40px -30px rgba(80, 50, 20, .35);
+}
+
+.cl-breadcrumb10-demo__title {
+  margin: 0;
+  font-size: clamp(34px, 5.4vw, 54px);
+  font-weight: 600;
+  letter-spacing: -.01em;
+  line-height: 1.1;
+}
+
+.cl-breadcrumb10-demo__intro {
+  margin: 14px 0 0;
+  color: #54463a;
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+.cl-breadcrumb10-demo__facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 24px 0 0;
+}
+
+.cl-breadcrumb10-demo__facts div {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #f6efe5;
+}
+
+.cl-breadcrumb10-demo__facts dt {
+  color: #7a5a1e;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.cl-breadcrumb10-demo__facts dd {
+  margin: 2px 0 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.cl-breadcrumb10-demo__code {
+  margin-top: 20px;
+  border: 1px solid #eadfce;
+  border-radius: 14px;
+  background: #fffdf9;
+  font-size: 15px;
+}
+
+.cl-breadcrumb10-demo__code summary {
+  padding: 14px 18px;
+  color: #5b4a3a;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cl-breadcrumb10-demo__code summary:focus-visible {
+  outline: 2px solid #a16207;
+  outline-offset: 2px;
+  border-radius: 14px;
+}
+
+.cl-breadcrumb10-demo__code p {
+  margin: 0 18px 12px;
+  color: #54463a;
+  line-height: 1.6;
+}
+
+.cl-breadcrumb10-demo__code pre {
+  margin: 0 18px 18px;
+  padding: 16px;
+  overflow-x: auto;
+  border-radius: 10px;
+  background: #2b2118;
+  color: #f5e9d8;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.cl-breadcrumb10-demo__code code {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+@media (max-width: 560px) {
+  .cl-breadcrumb10-demo__facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cl-breadcrumb10__link {
+    transition: none;
+  }
+}
